@@ -9,6 +9,6 @@ server.get("/", (req, res) => {
 });
 
 server.use(express.json());
-server.use("/api/project", TestRouter);
+server.use("/api/projects", TestRouter);
 
 module.exports = server;
