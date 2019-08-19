@@ -68,4 +68,57 @@ router.get("/:id/tasks", async (req, res) => {
     res.status(500).json({ message: "Failed to get task", error: err.message });
   }
 });
+
+router.post("/", async (req, res) => {
+  const projectData = req.body;
+
+  try {
+    const project = await Projects.addProject(projectData);
+    res.status(201).json(project);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to create new project" });
+  }
+});
+
+router.post("/:id/resources", async (req, res) => {
+  const resourceData = req.body;
+  const { id } = req.params;
+
+  try {
+    const project = await Projects.findById(id);
+
+    if (project) {
+      const resource = await Projects.addResources(resourceData, id);
+      res.status(201).json(resource);
+    } else {
+      res
+        .status(404)
+        .json({ message: "Could not find resource with given id." });
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Failed to create new resource", error: err.message });
+  }
+});
+
+router.post("/:id/tasks", async (req, res) => {
+  const taskData = req.body;
+  const { id } = req.params;
+
+  try {
+    const project = await Projects.findById(id);
+
+    if (project) {
+      const task = await Projects.addTask(taskData, id);
+      res.status(201).json(task);
+    } else {
+      res.status(404).json({ message: "Could not find task with given id." });
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Failed to create new task", error: err.message });
+  }
+});
 module.exports = router;

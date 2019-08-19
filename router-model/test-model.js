@@ -4,8 +4,10 @@ module.exports = {
   find,
   findById,
   findResources,
-  findTask
-  //   add
+  findTask,
+  addProject,
+  addResources,
+  addTask
 };
 
 function find() {
@@ -30,4 +32,19 @@ function findTask(id) {
     .select("t.id", "p.project_name", "p.Description")
 
     .where("p.id", id);
+}
+
+async function addProject(project) {
+  const [id] = await db("projects").insert(project);
+  return findById(id);
+}
+
+async function addResources(resources) {
+  const [id] = await db("resources").insert(resources);
+  return findById(id);
+}
+
+async function addTask(task) {
+  const [id] = await db("tasks").insert(task);
+  return findById(id);
 }
